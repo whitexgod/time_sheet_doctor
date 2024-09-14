@@ -8,6 +8,7 @@ const config = {
   TIME_ZONE: process.env.TIME_ZONE || "Asia/Kolkata",
   PERFORMERS: process.env.PERFORMERS,
   EVENTS: process.env.EVENTS,
+  API_URL: process.env.API_URL
 };
 
 export default config;

@@ -2,9 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const eventSelect = document.getElementById("eventSelect");
   const exportButton = document.getElementById("exportButton");
 
+   // Assume that `window.apiUrl` is set from your server
+   const apiUrl = window.apiUrl;
+
   async function fetchEvents() {
     try {
-      const response = await fetch("http://localhost:4000/api/events");
+      const response = await fetch(`${apiUrl}/events`);
       const result = await response.json();
 
       // Extract the events string

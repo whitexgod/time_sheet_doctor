@@ -5,25 +5,68 @@ import { recordModel } from "./model/recordModel";
 import convertUtcToTimeZone from "./helper/convertToTimeZone";
 import config from "./config/config";
 import ExcelJS from "exceljs";
+import fs from "fs";
 
 connectDatabase();
 
 const server: Application = express();
 server.use(express.json()); // Middleware to parse JSON
 
+server.set("view engine", "ejs");
+server.set("views", path.join(__dirname, "views")); // Directory where your EJS files are located
+
 // Serve static files from the "public" directory
 server.use(express.static(path.join(__dirname, "public")));
 
 server.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "record", "record.html"));
+  fs.readFile(
+    path.join(__dirname, "public", "record", "record.html"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        res.status(500).send("Error reading file");
+        return;
+      }
+
+      // Replace placeholder with actual API URL
+      const modifiedData = data.replace(/<%= apiUrl %>/g, config.API_URL!);
+      res.send(modifiedData);
+    }
+  );
 });
 
 server.get("/record-details", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "recordList", "recordList.html"));
+  fs.readFile(
+    path.join(__dirname, "public", "recordList", "recordList.html"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        res.status(500).send("Error reading file");
+        return;
+      }
+
+      // Replace placeholder with actual API URL
+      const modifiedData = data.replace(/<%= apiUrl %>/g, config.API_URL!);
+      res.send(modifiedData);
+    }
+  );
 });
 
 server.get("/export-data", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "export", "export.html"));
+  fs.readFile(
+    path.join(__dirname, "public", "export", "export.html"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        res.status(500).send("Error reading file");
+        return;
+      }
+
+      // Replace placeholder with actual API URL
+      const modifiedData = data.replace(/<%= apiUrl %>/g, config.API_URL!);
+      res.send(modifiedData);
+    }
+  );
 });
 
 server.get("/api/performers", async (req, res) => {
@@ -177,7 +220,7 @@ server.get("/export-records/:event", async (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+const PORT = parseInt(process.env.PORT || "3000", 10);
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });

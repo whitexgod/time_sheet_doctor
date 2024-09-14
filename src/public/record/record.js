@@ -2,11 +2,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   const performerSelect = document.getElementById("performer");
   const eventSelect = document.getElementById("event");
 
+  // Assume that `window.apiUrl` is set from your server
+  const apiUrl = window.apiUrl;
+
   try {
     // Fetch the list of performers
-    const performerResponse = await fetch(
-      "http://localhost:4000/api/performers"
-    );
+    const performerResponse = await fetch(`${apiUrl}/performers`);
     const performerData = await performerResponse.json();
 
     console.log("Fetched performers data:", performerData); // Log data to inspect its structure
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Fetch the list of events
-    const eventResponse = await fetch("http://localhost:4000/api/events");
+    const eventResponse = await fetch(`${apiUrl}/events`);
     const eventData = await eventResponse.json();
 
     console.log("Fetched events data:", eventData); // Log data to inspect its structure
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       try {
         // Send the data to your backend API (replace the URL with your backend endpoint)
-        const response = await fetch("http://localhost:4000/api/records", {
+        const response = await fetch(`${apiUrl}/records`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

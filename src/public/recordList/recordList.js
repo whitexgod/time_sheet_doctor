@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function fetchEvents() {
     try {
-      const response = await fetch("http://localhost:4000/api/events");
+      const response = await fetch(`${apiUrl}/events`);
       const result = await response.json();
 
       // Extract the events string
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function fetchPerformers(event, date) {
     try {
-      const url = date ? `/api/${event}?date=${date}` : `/api/${event}`;
+      const url = date ? `${apiUrl}/${event}?date=${date}` : `${apiUrl}/${event}`;
       const response = await fetch(url);
       const result = await response.json();
 
