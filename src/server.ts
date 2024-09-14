@@ -6,11 +6,28 @@ import convertUtcToTimeZone from "./helper/convertToTimeZone";
 import config from "./config/config";
 import ExcelJS from "exceljs";
 import fs from "fs";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 connectDatabase();
 
 const server: Application = express();
 server.use(express.json()); // Middleware to parse JSON
+
+// Session setup
+server.use(
+  session({
+    secret: config.SESSION_SECRET!, // Replace with your session secret
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: config.MONGO_URI, // Replace with your MongoDB URI
+    }),
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
 
 server.set("view engine", "ejs");
 server.set("views", path.join(__dirname, "views")); // Directory where your EJS files are located
@@ -18,7 +35,33 @@ server.set("views", path.join(__dirname, "views")); // Directory where your EJS 
 // Serve static files from the "public" directory
 server.use(express.static(path.join(__dirname, "public")));
 
+// Middleware to check if user is authenticated
+function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  if (req.session && req.session.user) {
+    return next();
+  } else {
+    res.redirect("/"); // Redirect to login page if not authenticated
+  }
+}
+
 server.get("/", (req, res) => {
+  fs.readFile(
+    path.join(__dirname, "public", "login", "login.html"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        res.status(500).send("Error reading file");
+        return;
+      }
+
+      // Replace placeholder with actual API URL
+      const modifiedData = data.replace(/<%= apiUrl %>/g, config.API_URL!);
+      res.send(modifiedData);
+    }
+  );
+});
+
+server.get("/add-record", isAuthenticated, (req, res) => {
   fs.readFile(
     path.join(__dirname, "public", "record", "record.html"),
     "utf8",
@@ -35,7 +78,7 @@ server.get("/", (req, res) => {
   );
 });
 
-server.get("/record-details", (req, res) => {
+server.get("/record-details", isAuthenticated, (req, res) => {
   fs.readFile(
     path.join(__dirname, "public", "recordList", "recordList.html"),
     "utf8",
@@ -52,7 +95,7 @@ server.get("/record-details", (req, res) => {
   );
 });
 
-server.get("/export-data", (req, res) => {
+server.get("/export-data", isAuthenticated, (req, res) => {
   fs.readFile(
     path.join(__dirname, "public", "export", "export.html"),
     "utf8",
@@ -67,6 +110,23 @@ server.get("/export-data", (req, res) => {
       res.send(modifiedData);
     }
   );
+});
+
+server.post("/api/login", (req, res) => {
+  const { email, password } = req.body;
+
+  // Validate credentials (example only; use proper authentication methods)
+  if (
+    email === config.SUPER_ADMIN_EMAIL &&
+    password === config.SUPER_ADMIN_PASSWORD
+  ) {
+    req.session.user = { email }; // Store user info in session
+    res.json({ success: true });
+  } else {
+    res
+      .status(401)
+      .json({ success: false, message: "Invalid email or password." });
+  }
 });
 
 server.get("/api/performers", async (req, res) => {
