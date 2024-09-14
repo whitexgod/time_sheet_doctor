@@ -1,0 +1,137 @@
+/* Reset and box-sizing */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e2e2e2, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Container styling */
+.container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Heading styling */
+h1 {
+  font-size: 2em;
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Form-group styling */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Label styling */
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+/* Input, textarea, and select styling */
+input[type="text"], 
+input[type="datetime-local"], 
+input[type="date"], /* Added for date input */
+textarea, 
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Input, textarea, and select focus state */
+input:focus, 
+textarea:focus, 
+select:focus, 
+input[type="date"]:focus { /* Added for date input focus state */
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+  outline: none;
+}
+
+/* Select styling */
+select {
+  -webkit-appearance: none; /* Remove default styling in WebKit browsers */
+  -moz-appearance: none; /* Remove default styling in Firefox */
+  appearance: none; /* Remove default styling in modern browsers */
+  background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,7" fill="%23333"/></svg>') no-repeat right 10px center;
+  background-size: 10px;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Button hover state */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Button active state */
+button:active {
+  transform: scale(0.98);
+}
+
+/* Response styling */
+#response {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #4CAF50;
+  text-align: center;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Record Form</title>
+    <link rel="stylesheet" href="/record/record.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Record Event</h1>
+      <form id="recordForm">
+        <div class="form-group">
+          <label for="event">Event:</label>
+          <select id="event" name="event" required>
+            <option value="">Select an event</option>
+            <!-- Event options will be populated here -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="performer">Performer:</label>
+          <select id="performer" name="performer" required>
+            <option value="">Select a performer</option>
+            <!-- Performer options will be populated here -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="startTime">Start Time:</label>
+          <input
+            type="datetime-local"
+            id="startTime"
+            name="startTime"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="endTime">End Time:</label>
+          <input type="datetime-local" id="endTime" name="endTime" required />
+        </div>
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+        <div class="form-group">
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+      <div id="response"></div>
+      <!-- Add the new button for redirection -->
+      <div class="form-group">
+        <button id="redirectButtonToRecordDetails">Go to Record Details</button>
+      </div>
+      <!-- Add the new button for redirection -->
+      <div class="form-group">
+        <button id="redirectButtonToExportData">Go to Export Data</button>
+      </div>
+    </div>
+
+    <script src="/record/record.js"></script>
+  </body>
+</html>

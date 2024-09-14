@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Performers</title>
+    <link rel="stylesheet" href="/recordList/recordList.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Event Performers</h1>
+      <select id="eventSelect">
+        <option value="">Select an event</option>
+      </select>
+      <input type="date" id="dateFilter" />
+      <table id="performersTable">
+        <thead>
+          <tr>
+            <th>Performer</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Time Elapsed (min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Performers data will be displayed here -->
+        </tbody>
+      </table>
+    </div>
+    <script src="/recordList/recordList.js"></script>
+  </body>
+</html>

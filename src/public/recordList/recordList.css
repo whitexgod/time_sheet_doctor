@@ -1,0 +1,103 @@
+/* Basic reset for table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff; /* Ensure table background is white */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Ensure rounded corners are visible */
+    transition: all 0.3s ease; /* Smooth transition */
+}
+
+/* Header styling */
+th {
+    background-color: #4CAF50; /* Green background for headers */
+    color: #fff; /* White text color for headers */
+    font-weight: bold; /* Bold header text */
+    padding: 16px 20px; /* Added space in heading */
+    text-align: left;
+    border-bottom: 2px solid #388E3C; /* Slightly darker green border */
+    text-transform: uppercase; /* Uppercase header text */
+}
+
+/* Cell styling */
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions for hover effects */
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+    background-color: #f4f4f4; /* Lighter row color */
+}
+
+/* Hover effects */
+tr:hover {
+    background-color: #e0e0e0; /* Light gray hover color */
+    transform: scale(1.02); /* Slightly scale up row on hover */
+}
+
+/* Smooth row transition */
+tbody tr {
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Add border radius to cells */
+td, th {
+    border-radius: 4px;
+}
+
+/* Dropdown and date input styling */
+select, 
+input[type="date"] {
+    display: block;
+    width: 100%;
+    padding: 12px 15px; /* Increased padding for better touch targets */
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff; /* Ensure background is white */
+    color: #333; /* Ensure text color is dark enough for visibility */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+select:focus, 
+input[type="date"]:focus {
+    border-color: #4CAF50; /* Match border color to green theme */
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Green shadow effect */
+}
+
+/* Ensure table maintains its design consistency on responsive screens */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
+}
+
+/* Styles for the dropdown */
+select#eventSelect {
+    background-color: #ffffff !important; /* Ensure background is white */
+    color: #000000 !important; /* Ensure text color is black */
+    border: 1px solid #4CAF50 !important; /* Border color */
+    padding: 8px !important; /* Padding */
+    border-radius: 4px !important; /* Rounded corners */
+    font-size: 16px !important; /* Font size */
+    cursor: pointer !important; /* Pointer cursor */
+  }
+  
+  select#eventSelect option {
+    background-color: #ffffff !important; /* White background for options */
+    color: #000000 !important; /* Black text color for options */
+  }
+  
+  /* Optional: Style for dropdown on hover */
+  select#eventSelect:hover {
+    border-color: #45a049; /* Slightly darker border color on hover */
+  }
+  
