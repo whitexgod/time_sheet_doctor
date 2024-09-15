@@ -163,18 +163,14 @@ server.get("/api/:event", async (req: Request, res: Response) => {
       query.date = new Date(date).toISOString().split("T")[0]; // Convert date string to Date object
     }
 
-    // Switch case to handle different event types
-    switch (event) {
-      case "DRAMA":
-        queryResult = await recordModel.find(query).sort({ date: -1 });
-        break;
+    queryResult = await recordModel.find(query).sort({ date: -1 });
 
-      default:
-        queryResult = null;
+    if (queryResult?.length) {
+      return res.status(200).json({ data: queryResult });
     }
 
     // Send the query result as a JSON response
-    res.status(200).json({ data: queryResult });
+    res.status(500).json({ error: "Internal Server Error" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

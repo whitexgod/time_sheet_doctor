@@ -12,17 +12,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     console.log("Fetched performers data:", performerData); // Log data to inspect its structure
 
-    // Extract the performers string
     let performersString = performerData.performers;
-
-    // Replace single quotes with double quotes for valid JSON
     performersString = performersString.replace(/'/g, '"');
-
-    // Convert the JSON string to a JavaScript array
     const performers = JSON.parse(performersString);
 
     if (Array.isArray(performers)) {
-      // Populate the performer dropdown
       performers.forEach((performer) => {
         const option = document.createElement("option");
         option.value = performer;
@@ -42,17 +36,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     console.log("Fetched events data:", eventData); // Log data to inspect its structure
 
-    // Extract the events string
     let eventsString = eventData.events;
-
-    // Replace single quotes with double quotes for valid JSON
     eventsString = eventsString.replace(/'/g, '"');
-
-    // Convert the JSON string to a JavaScript array
     const events = JSON.parse(eventsString);
 
     if (Array.isArray(events)) {
-      // Populate the event dropdown
       events.forEach((event) => {
         const option = document.createElement("option");
         option.value = event;
@@ -72,13 +60,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     .addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      // Get form data
       const event = document.getElementById("event").value;
       const performer = document.getElementById("performer").value;
-      const startTime = new Date(document.getElementById("startTime").value);
-      const endTime = new Date(document.getElementById("endTime").value);
       const dateInput = document.getElementById("date").value;
       const date = new Date(dateInput).toISOString().split("T")[0]; // Formats to 'YYYY-MM-DD'
+
+      const startTimeInput = document.getElementById("startTime").value;
+      const endTimeInput = document.getElementById("endTime").value;
+
+      // Combine the selected date with the input time values
+      const startTime = new Date(`${date}T${startTimeInput}:00`);
+      const endTime = new Date(`${date}T${endTimeInput}:00`);
 
       // Get the user's time zone
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -108,7 +100,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       };
 
       try {
-        // Send the data to your backend API (replace the URL with your backend endpoint)
         const response = await fetch(`${apiUrl}/records`, {
           method: "POST",
           headers: {
