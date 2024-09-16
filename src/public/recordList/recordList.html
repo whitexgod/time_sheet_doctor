@@ -13,6 +13,9 @@
         <option value="">Select an event</option>
       </select>
       <input type="date" id="dateFilter" />
+      <!-- Add input for filtering by name -->
+      <input type="text" id="nameFilter" placeholder="Filter by performer name" />
+
       <table id="performersTable">
         <thead>
           <tr>
@@ -20,6 +23,7 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Time Elapsed (min)</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

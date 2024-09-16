@@ -100,4 +100,47 @@ select#eventSelect {
   select#eventSelect:hover {
     border-color: #45a049; /* Slightly darker border color on hover */
   }
+
+
+  .delete-btn {
+  background-color: #e74c3c; /* Red color */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Filter by name input styling */
+input#nameFilter {
+    display: block;
+    width: 100%;
+    padding: 12px 15px; /* Increased padding for better touch targets */
+    margin-bottom: 20px; /* Space below the input */
+    font-size: 16px; /* Font size for readability */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color for visibility */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+/* Focus state for the filter input */
+input#nameFilter:focus {
+    border-color: #4CAF50; /* Green border on focus */
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Green shadow effect */
+}
+
+/* Optional: Add placeholder styling */
+input#nameFilter::placeholder {
+    color: #888; /* Gray color for placeholder text */
+    font-style: italic; /* Italicize placeholder text */
+}
   

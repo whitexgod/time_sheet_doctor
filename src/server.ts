@@ -78,7 +78,7 @@ server.get("/add-record", isAuthenticated, (req, res) => {
   );
 });
 
-server.get("/record-details", isAuthenticated, (req, res) => {
+server.get("/record-details", (req, res) => {
   fs.readFile(
     path.join(__dirname, "public", "recordList", "recordList.html"),
     "utf8",
@@ -147,10 +147,40 @@ server.get("/api/events", async (req, res) => {
   }
 });
 
+server.delete("/api/performers/:id", isAuthenticated, async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    // Check if the ID is valid (optional, depending on your use case)
+    if (!id) {
+      return res.status(400).json({ error: "ID parameter is required" });
+    }
+
+    // Perform the delete operation
+    const result = await recordModel.deleteOne({ _id: id });
+
+    // Check if the deletion was successful
+    if (result.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Record not found", success: false });
+    }
+
+    res.status(200).json({
+      message: "Record deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 server.get("/api/:event", async (req: Request, res: Response) => {
   try {
-    const event = req.params.event.toUpperCase(); // Extract event from URL
-    const date = req.query.date as string; // Extract date query parameter and cast to string
+    const event = req.params.event.toUpperCase();
+    const date = req.query.date as string;
 
     // Define query result variable
     let queryResult;
@@ -188,9 +218,9 @@ server.post("/api/records", async (req, res) => {
     return res.status(200).json({
       message: "Data stored successfully",
     });
-  } catch (error:any) {
+  } catch (error: any) {
     console.log(error);
-    res.status(400).json({message:error.message})
+    res.status(400).json({ message: error.message });
   }
 });
 
