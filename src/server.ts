@@ -8,6 +8,8 @@ import ExcelJS from "exceljs";
 import fs from "fs";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import { getWeekNumber } from "./helper/getWeekNumber";
+import { formatTime } from "./helper/formatTime";
 
 connectDatabase();
 
@@ -271,6 +273,11 @@ server.get("/export-records/:event", async (req, res) => {
         { header: "Start Time", key: "startTime", width: 20 },
         { header: "End Time", key: "endTime", width: 20 },
         { header: "Time Elapsed (min)", key: "timeElapsed", width: 20 },
+        {
+          header: "Time Elapsed (h:mm)",
+          key: "timeElapsedFormatted",
+          width: 20,
+        }, // New column for formatted time
       ];
 
       // Add rows
@@ -281,13 +288,46 @@ server.get("/export-records/:event", async (req, res) => {
           startTime: record.startTime,
           endTime: record.endTime,
           timeElapsed: record.timeElapsed,
+          timeElapsedFormatted: formatTime(record.timeElapsed), // Add formatted time
         });
       });
+
+      // Calculate weekly time
+      const weeklyTime: { [week: string]: number } = groupedRecords[
+        performer
+      ].reduce((acc, record) => {
+        const date = new Date(record.date);
+        const year = date.getFullYear();
+        const week = getWeekNumber(date);
+        const weekKey = `${year}-W${week}`;
+
+        if (!acc[weekKey]) {
+          acc[weekKey] = 0;
+        }
+        acc[weekKey] += record.timeElapsed;
+
+        return acc;
+      }, {} as { [week: string]: number });
+
+      // Add weekly time summary
+      worksheet.addRow([]);
+      worksheet.addRow(["Weekly Time Summary"]);
+      worksheet.addRow(["Week", "Total Time (min)", "Total Time (h:mm)"]); // Added new column for formatted time
+
+      Object.keys(weeklyTime).forEach((week) => {
+        worksheet.addRow([
+          week,
+          weeklyTime[week],
+          formatTime(weeklyTime[week]),
+        ]); // Add formatted time
+      });
     }
+
     const date = new Date();
     const filename = `records-${date.getFullYear()}-${
       date.getMonth() + 1
     }-${date.getDate()}.xlsx`;
+
     // Set the response headers
     res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
     res.setHeader(
