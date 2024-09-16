@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const performerSelect = document.getElementById("performer");
   const eventSelect = document.getElementById("event");
+  const dateInput = document.getElementById("date");
+
+  // Set today's date as default in the date input field
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in 'YYYY-MM-DD' format
+  dateInput.value = today;
 
   // Assume that `window.apiUrl` is set from your server
   const apiUrl = window.apiUrl;
@@ -57,72 +62,93 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Handle form submission
   document
     .getElementById("recordForm")
-    .addEventListener("submit", async function (e) {
+    .addEventListener("submit", function (e) {
       e.preventDefault();
 
       const event = document.getElementById("event").value;
       const performer = document.getElementById("performer").value;
       const dateInput = document.getElementById("date").value;
-      const date = new Date(dateInput).toISOString().split("T")[0]; // Formats to 'YYYY-MM-DD'
+      const date = new Date(dateInput).toISOString().split("T")[0];
 
       const startTimeInput = document.getElementById("startTime").value;
       const endTimeInput = document.getElementById("endTime").value;
 
-      // Combine the selected date with the input time values
       const startTime = new Date(`${date}T${startTimeInput}:00`);
       const endTime = new Date(`${date}T${endTimeInput}:00`);
 
-      // Get the user's time zone
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      // Calculate time elapsed in milliseconds
       const timeElapsedMilliseconds = endTime.getTime() - startTime.getTime();
-
-      // Convert milliseconds to minutes
       const timeElapsed = timeElapsedMilliseconds / (1000 * 60);
 
-      // Validate that the endTime is after startTime
+      // Validate the time
       if (timeElapsed < 0) {
         document.getElementById("response").innerText =
           "End time must be after start time.";
         return;
       }
 
-      // Prepare the data object to be sent to the server
+      // Prepare the record data object
       const recordData = {
         event,
         performer,
-        startTime: startTime.toISOString(), // Convert to ISO string
-        endTime: endTime.toISOString(), // Convert to ISO string
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
         timeElapsed,
-        date, // Include the formatted date
-        timeZone, // Include the time zone
+        date,
+        timeZone,
       };
 
-      try {
-        const response = await fetch(`${apiUrl}/records`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(recordData),
-        });
+      // Populate the confirmation modal with the details
+      const modalDetails = `
+        Event: ${event}<br>
+        Performer: ${performer}<br>
+        Date: ${date}<br>
+        Start Time: ${startTimeInput}<br>
+        End Time: ${endTimeInput}<br>
+        Time Elapsed: ${timeElapsed} minutes<br>
+        Time Zone: ${timeZone}
+      `;
+      document.getElementById("modalDetails").innerHTML = modalDetails;
 
-        const result = await response.json();
+      // Show the confirmation modal
+      const modal = document.getElementById("confirmationModal");
+      modal.style.display = "flex";
 
-        if (response.ok) {
+      // If the user confirms, submit the form
+      document.getElementById("confirmButton").onclick = async function () {
+        try {
+          const response = await fetch(`${apiUrl}/records`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(recordData),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            document.getElementById("response").innerText =
+              "Record saved successfully!";
+            document.getElementById("recordForm").reset(); // Reset the form
+          } else {
+            document.getElementById("response").innerText =
+              "Error: " + result.message;
+          }
+        } catch (err) {
+          console.error("Error submitting record:", err);
           document.getElementById("response").innerText =
-            "Record saved successfully!";
-          document.getElementById("recordForm").reset(); // Reset the form after successful submission
-        } else {
-          document.getElementById("response").innerText =
-            "Error: " + result.message;
+            "Error: Could not submit record.";
         }
-      } catch (err) {
-        console.error("Error submitting record:", err);
-        document.getElementById("response").innerText =
-          "Error: Could not submit record.";
-      }
+
+        modal.style.display = "none"; // Hide the modal after confirmation
+        dateInput.value = today;
+      };
+
+      // If the user cancels, close the modal
+      document.getElementById("cancelButton").onclick = function () {
+        modal.style.display = "none";
+      };
     });
 
   // Redirect to /record-details on button click

@@ -9,6 +9,17 @@
   <body>
     <div class="container">
       <h1>Record Event</h1>
+      <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+          <h2>Confirm Submission</h2>
+          <p>Are you sure you want to submit the following details?</p>
+          <p id="modalDetails"></p>
+          <div class="form-group">
+            <button id="confirmButton">Confirm</button>
+            <button id="cancelButton">Cancel</button>
+          </div>
+        </div>
+      </div>
       <form id="recordForm">
         <div class="form-group">
           <label for="event">Event:</label>

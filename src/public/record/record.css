@@ -52,8 +52,8 @@ label {
 
 /* Input, textarea, and select styling */
 input[type="text"], 
-input[type="time"], /* Added for time input */
-input[type="date"], /* Added for date input */
+input[type="time"], 
+input[type="date"], 
 textarea, 
 select {
   width: 100%;
@@ -67,8 +67,8 @@ select {
 input:focus, 
 textarea:focus, 
 select:focus, 
-input[type="time"]:focus, /* Added focus for time input */
-input[type="date"]:focus { /* Added for date input focus state */
+input[type="time"]:focus, 
+input[type="date"]:focus {
   border-color: #4CAF50;
   box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
   outline: none;
@@ -76,9 +76,9 @@ input[type="date"]:focus { /* Added for date input focus state */
 
 /* Select styling */
 select {
-  -webkit-appearance: none; /* Remove default styling in WebKit browsers */
-  -moz-appearance: none; /* Remove default styling in Firefox */
-  appearance: none; /* Remove default styling in modern browsers */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,7" fill="%23333"/></svg>') no-repeat right 10px center;
   background-size: 10px;
 }
@@ -114,15 +114,89 @@ button:active {
   text-align: center;
 }
 
+/* Modal styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.4); /* Black background with transparency */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: fadeInUp 0.5s ease;
+  /* Ensure it doesn't move on resize */
+  box-sizing: border-box;
+}
+
+/* Modal heading */
+.modal h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Modal details paragraph */
+.modal p {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Modal buttons */
+.modal .form-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal button {
+  width: 45%;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Confirm button */
+#confirmButton {
+  background-color: #4CAF50;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+#confirmButton:hover {
+  background-color: #45a049;
+}
+
+/* Cancel button */
+#cancelButton {
+  background-color: #f44336;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+#cancelButton:hover {
+  background-color: #e53935;
+}
+
 /* Keyframe animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

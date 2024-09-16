@@ -95,7 +95,7 @@ server.get("/record-details", isAuthenticated, (req, res) => {
   );
 });
 
-server.get("/export-data", isAuthenticated, (req, res) => {
+server.get("/export-data", (req, res) => {
   fs.readFile(
     path.join(__dirname, "public", "export", "export.html"),
     "utf8",
@@ -188,8 +188,9 @@ server.post("/api/records", async (req, res) => {
     return res.status(200).json({
       message: "Data stored successfully",
     });
-  } catch (error) {
+  } catch (error:any) {
     console.log(error);
+    res.status(400).json({message:error.message})
   }
 });
 
