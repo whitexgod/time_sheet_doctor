@@ -69,16 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
     addDeleteHandlers();
   }
 
-  // Add event listeners for delete buttons
-  function addDeleteHandlers() {
-    document.querySelectorAll(".delete-btn").forEach((button) => {
-      button.addEventListener("click", async function () {
-        const performerId = this.getAttribute("data-id");
-        await deletePerformer(performerId);
-      });
-    });
-  }
-
   async function deletePerformer(id) {
     try {
       const response = await fetch(`${apiUrl}/performers/${id}`, {
@@ -95,7 +85,20 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error:", error);
     }
   }
-
+  // Add event listeners for delete buttons
+  function addDeleteHandlers() {
+    document.querySelectorAll(".delete-btn").forEach((button) => {
+      button.addEventListener("click", async function () {
+        const performerId = this.getAttribute("data-id");
+        const confirmDelete = confirm(
+          "Are you sure you want to delete this record?"
+        );
+        if (confirmDelete) {
+          await deletePerformer(performerId);
+        }
+      });
+    });
+  }
   // Filter performers by name
   nameFilter.addEventListener("input", function () {
     const filterValue = nameFilter.value.toLowerCase();
