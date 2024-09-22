@@ -8,7 +8,6 @@ import ExcelJS from "exceljs";
 import fs from "fs";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import { getWeekNumber } from "./helper/getWeekNumber";
 import { formatTime } from "./helper/formatTime";
 
 connectDatabase();
@@ -149,35 +148,38 @@ server.get("/api/events", async (req, res) => {
   }
 });
 
-server.delete("/api/performers/:id", isAuthenticated, async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id;
+server.delete(
+  "/api/performers/:id",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    try {
+      const id = req.params.id;
 
-    // Check if the ID is valid (optional, depending on your use case)
-    if (!id) {
-      return res.status(400).json({ error: "ID parameter is required" });
+      // Check if the ID is valid (optional, depending on your use case)
+      if (!id) {
+        return res.status(400).json({ error: "ID parameter is required" });
+      }
+
+      // Perform the delete operation
+      const result = await recordModel.deleteOne({ _id: id });
+
+      // Check if the deletion was successful
+      if (result.deletedCount === 0) {
+        return res
+          .status(404)
+          .json({ message: "Record not found", success: false });
+      }
+
+      res.status(200).json({
+        message: "Record deleted successfully",
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-
-    // Perform the delete operation
-    const result = await recordModel.deleteOne({ _id: id });
-
-    // Check if the deletion was successful
-    if (result.deletedCount === 0) {
-      return res
-        .status(404)
-        .json({ message: "Record not found", success: false });
-    }
-
-    res.status(200).json({
-      message: "Record deleted successfully",
-      success: true,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
   }
-});
-
+);
 
 server.get("/api/:event", async (req: Request, res: Response) => {
   try {
@@ -291,36 +293,6 @@ server.get("/export-records/:event", async (req, res) => {
           timeElapsedFormatted: formatTime(record.timeElapsed), // Add formatted time
         });
       });
-
-      // Calculate weekly time
-      const weeklyTime: { [week: string]: number } = groupedRecords[
-        performer
-      ].reduce((acc, record) => {
-        const date = new Date(record.date);
-        const year = date.getFullYear();
-        const week = getWeekNumber(date);
-        const weekKey = `${year}-W${week}`;
-
-        if (!acc[weekKey]) {
-          acc[weekKey] = 0;
-        }
-        acc[weekKey] += record.timeElapsed;
-
-        return acc;
-      }, {} as { [week: string]: number });
-
-      // Add weekly time summary
-      worksheet.addRow([]);
-      worksheet.addRow(["Weekly Time Summary"]);
-      worksheet.addRow(["Week", "Total Time (min)", "Total Time (h:mm)"]); // Added new column for formatted time
-
-      Object.keys(weeklyTime).forEach((week) => {
-        worksheet.addRow([
-          week,
-          weeklyTime[week],
-          formatTime(weeklyTime[week]),
-        ]); // Add formatted time
-      });
     }
 
     const date = new Date();
@@ -349,5 +321,5 @@ server.get("/export-records/:event", async (req, res) => {
 // Start the server
 const PORT = parseInt(process.env.PORT || "3000", 10);
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });
